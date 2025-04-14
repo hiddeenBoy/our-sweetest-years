@@ -8,6 +8,7 @@ import LoveLetter from "../components/LoveLetter";
 import MemoryJar from "../components/MemoryJar";
 import MusicPlayer from "../components/MusicPlayer";
 import Footer from "../components/Footer";
+import MobileNavigation from "../components/MobileNavigation";
 
 const Index = () => {
   // Smooth scrolling for anchor links
@@ -36,7 +37,7 @@ const Index = () => {
   return (
     <div className="flex flex-col min-h-screen bg-romance-offWhite">
       <Header />
-      <main>
+      <main className="pb-16 md:pb-0">
         <Hero />
         <Timeline />
         <Gallery />
@@ -45,6 +46,7 @@ const Index = () => {
       </main>
       <MusicPlayer />
       <Footer />
+      <MobileNavigation />
     </div>
   );
 };

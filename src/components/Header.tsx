@@ -67,7 +67,7 @@ const Header: React.FC = () => {
           ))}
         </nav>
 
-        {/* Mobile Menu Button */}
+        {/* Mobile Menu Button - Only show on larger screens since we have bottom nav on mobile */}
         <button 
           onClick={toggleMobileMenu}
           className="md:hidden flex items-center justify-center w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm"
@@ -80,7 +80,7 @@ const Header: React.FC = () => {
         </button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu - This becomes the slide-in menu for tablet sizes */}
       {mobileMenuOpen && (
         <div className="md:hidden fixed inset-0 top-[60px] bg-white/95 backdrop-blur-md z-40 animate-fade-in">
           <div className="container-custom flex flex-col space-y-6 pt-10 px-6">
