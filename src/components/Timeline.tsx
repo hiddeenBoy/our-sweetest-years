@@ -20,7 +20,6 @@ const Timeline: React.FC = () => {
               key={memory.id} 
               className={`timeline-item grid grid-cols-1 md:grid-cols-5 gap-6 mb-16 last:mb-0 opacity-0`}
               style={{
-                animationDelay: `${index * 0.2}s`,
                 animationFillMode: 'forwards',
                 animation: 'fade-in 0.8s ease-out forwards',
                 animationDelay: `${index * 0.2}s`
