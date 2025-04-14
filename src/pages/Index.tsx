@@ -21,7 +21,7 @@ const Index = () => {
           const targetElement = document.querySelector(targetId);
           if (targetElement) {
             window.scrollTo({
-              top: targetElement.getBoundingClientRect().top + window.scrollY - 100,
+              top: targetElement.getBoundingClientRect().top + window.scrollY - 80,
               behavior: 'smooth'
             });
           }
@@ -34,7 +34,7 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-romance-offWhite">
       <Header />
       <main>
         <Hero />
