@@ -130,8 +130,13 @@ const MusicPlayer: React.FC = () => {
   
   return (
     <div
-      className={`fixed ${isMobile ? 'bottom-16 left-0 right-0 z-50' : 'bottom-0 right-0 z-40'} bg-white rounded-tl-lg shadow-lg transition-all duration-300 border-t border-l border-romance-pink/20 ${
-        isMinimized ? (isMobile ? "h-12 w-full rounded-none" : "w-16 h-16") : (isMobile ? "w-full h-auto rounded-none" : "w-72 h-auto")
+      className={`fixed ${isMobile ? 'bottom-16 left-0 right-0 z-[999]' : 'bottom-0 right-0 z-40'} 
+      bg-white rounded-tl-lg shadow-lg transition-all duration-300 
+      border-t border-l border-romance-pink/20 
+      ${
+        isMinimized 
+          ? (isMobile ? "h-12 w-full" : "w-16 h-16") 
+          : (isMobile ? "w-full h-auto" : "w-72 h-auto")
       }`}
     >
       {/* Minimized View */}
