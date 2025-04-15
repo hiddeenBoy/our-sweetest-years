@@ -1,9 +1,10 @@
+
 import React, { useState, useRef, useEffect } from "react";
 import { Music, Pause, Play, SkipBack, SkipForward, Volume2, VolumeX } from "lucide-react";
 import { playlist } from "../data/playlist";
 
 const MusicPlayer: React.FC = () => {
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true); // Changed default to true for autoplay
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
   const [isMinimized, setIsMinimized] = useState(true);
@@ -13,6 +14,26 @@ const MusicPlayer: React.FC = () => {
   useEffect(() => {
     // Create audio element
     audioRef.current = new Audio();
+    
+    // Set up autoplay when component mounts
+    const initializeAudio = async () => {
+      if (audioRef.current) {
+        const currentSong = playlist[currentSongIndex];
+        if (currentSong.audioFile) {
+          audioRef.current.src = `/music/${currentSong.audioFile}`;
+          try {
+            // Try to autoplay
+            await audioRef.current.play();
+          } catch (error) {
+            // Autoplay was prevented by browser policy
+            console.log("Autoplay prevented:", error);
+            setIsPlaying(false);
+          }
+        }
+      }
+    };
+    
+    initializeAudio();
     
     // Clean up function
     return () => {
