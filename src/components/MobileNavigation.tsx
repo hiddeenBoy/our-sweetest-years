@@ -19,7 +19,7 @@ const MobileNavigation: React.FC = () => {
   ];
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md shadow-[0_-2px_10px_rgba(0,0,0,0.05)] py-2 z-40 border-t border-romance-pink/20">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md shadow-[0_-2px_10px_rgba(0,0,0,0.05)] py-2 z-50 border-t border-romance-pink/20">
       <div className="flex items-center justify-around">
         {navItems.map((item) => (
           <a

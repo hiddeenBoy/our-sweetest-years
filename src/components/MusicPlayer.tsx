@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Music, Pause, Play, SkipBack, SkipForward, Volume2, VolumeX } from "lucide-react";
 import { playlist } from "../data/playlist";
+import { useIsMobile } from "../hooks/use-mobile";
 
 const MusicPlayer: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState(true); // Changed default to true for autoplay
@@ -10,6 +11,7 @@ const MusicPlayer: React.FC = () => {
   const [isMinimized, setIsMinimized] = useState(true);
   const [progress, setProgress] = useState(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const isMobile = useIsMobile();
   
   useEffect(() => {
     // Create audio element
@@ -128,17 +130,18 @@ const MusicPlayer: React.FC = () => {
   
   return (
     <div
-      className={`fixed bottom-0 right-0 z-40 bg-white rounded-tl-lg shadow-lg transition-all duration-300 border-t border-l border-romance-pink/20 ${
-        isMinimized ? "w-16 h-16" : "w-72 h-auto"
+      className={`fixed ${isMobile ? 'bottom-16 left-0 right-0 z-50' : 'bottom-0 right-0 z-40'} bg-white rounded-tl-lg shadow-lg transition-all duration-300 border-t border-l border-romance-pink/20 ${
+        isMinimized ? (isMobile ? "h-12 w-full rounded-none" : "w-16 h-16") : (isMobile ? "w-full h-auto rounded-none" : "w-72 h-auto")
       }`}
     >
       {/* Minimized View */}
       {isMinimized ? (
         <button
           onClick={toggleMinimize}
-          className="w-full h-full flex items-center justify-center text-romance-pink hover:bg-romance-pink/10 rounded-tl-lg transition-colors"
+          className={`w-full h-full flex items-center justify-center text-romance-pink hover:bg-romance-pink/10 ${isMobile ? '' : 'rounded-tl-lg'}`}
         >
-          <Music size={24} />
+          <Music size={isMobile ? 20 : 24} />
+          {isMobile && <span className="ml-2 text-xs">{currentSong.title}</span>}
         </button>
       ) : (
         <div className="p-4">
