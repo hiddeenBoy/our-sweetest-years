@@ -1,30 +1,101 @@
-
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Music, Pause, Play, SkipBack, SkipForward, Volume2, VolumeX } from "lucide-react";
-import { playlist } from "../data/memories";
+import { playlist } from "../data/playlist";
 
 const MusicPlayer: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
   const [isMinimized, setIsMinimized] = useState(true);
+  const [progress, setProgress] = useState(0);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   
-  // In a real app, you would have actual audio playing functionality
-  // For this demo, we'll just toggle states
+  useEffect(() => {
+    // Create audio element
+    audioRef.current = new Audio();
+    
+    // Clean up function
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.src = "";
+      }
+    };
+  }, []);
+  
+  useEffect(() => {
+    if (!audioRef.current) return;
+    
+    // Load the current song
+    const currentSong = playlist[currentSongIndex];
+    if (currentSong.audioFile) {
+      audioRef.current.src = `/music/${currentSong.audioFile}`;
+      
+      if (isPlaying) {
+        audioRef.current.play().catch(error => {
+          console.error("Error playing audio:", error);
+          setIsPlaying(false);
+        });
+      }
+    }
+    
+    // Set up event listeners for the audio element
+    const audio = audioRef.current;
+    
+    const updateProgress = () => {
+      if (audio.duration) {
+        setProgress((audio.currentTime / audio.duration) * 100);
+      }
+    };
+    
+    const handleEnded = () => {
+      nextSong();
+    };
+    
+    audio.addEventListener("timeupdate", updateProgress);
+    audio.addEventListener("ended", handleEnded);
+    
+    // Update mute status
+    audio.muted = isMuted;
+    
+    return () => {
+      audio.removeEventListener("timeupdate", updateProgress);
+      audio.removeEventListener("ended", handleEnded);
+    };
+  }, [currentSongIndex, isPlaying, isMuted]);
   
   const togglePlay = () => {
+    if (!audioRef.current) return;
+    
+    if (isPlaying) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play().catch(error => {
+        console.error("Error playing audio:", error);
+      });
+    }
+    
     setIsPlaying(!isPlaying);
   };
   
   const nextSong = () => {
     setCurrentSongIndex((prev) => (prev + 1) % playlist.length);
+    if (isPlaying && audioRef.current) {
+      audioRef.current.currentTime = 0;
+    }
   };
   
   const prevSong = () => {
     setCurrentSongIndex((prev) => (prev - 1 + playlist.length) % playlist.length);
+    if (isPlaying && audioRef.current) {
+      audioRef.current.currentTime = 0;
+    }
   };
   
   const toggleMute = () => {
+    if (audioRef.current) {
+      audioRef.current.muted = !isMuted;
+    }
     setIsMuted(!isMuted);
   };
   
@@ -63,11 +134,11 @@ const MusicPlayer: React.FC = () => {
             <p className="text-sm text-gray-500 truncate">{currentSong.artist}</p>
           </div>
           
-          {/* Progress bar (simplified) */}
+          {/* Progress bar */}
           <div className="h-1 w-full bg-gray-200 rounded-full mb-4">
             <div
-              className="h-1 bg-romance-pink rounded-full"
-              style={{ width: isPlaying ? "45%" : "0%" }}
+              className="h-1 bg-romance-pink rounded-full transition-all duration-300"
+              style={{ width: `${progress}%` }}
             ></div>
           </div>
           
